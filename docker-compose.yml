@@ -9,45 +9,35 @@ services:
     depends_on:
       - postgres
       - pgadmin
-    expose:
-      - 3000
+    ports:
+      - 3000:3000
 
   postgres:
     container_name: postgres_container
     image: postgres
+    restart: unless-stopped
     environment:
-      POSTGRES_USER: "postgres"
-      POSTGRES_PASSWORD: "postgres"
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root
       POSTGRES_DB: "BookingHotel"
-      PGDATA: /data/postgres
+    ports:
+      - 8001:5432
     volumes:
       - postgres:/data/postgres
-    ports:
-      - "5432:5432"
-    networks:
-      - postgres
-    restart: unless-stopped
 
   pgadmin:
     container_name: pgadmin_container
     image: dpage/pgadmin4
+    restart: unless-stopped
     environment:
-      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL:-pgadmin4@pgadmin.org}
-      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD:-admin}
-      PGADMIN_CONFIG_SERVER_MODE: "False"
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: root
+    ports:
+      - 5050:80
     volumes:
       - pgadmin:/var/lib/pgadmin
     depends_on:
       - postgres
-    ports:
-      - "${PGADMIN_PORT:-5050}:80"
-    networks:
-      - postgres
-    restart: unless-stopped
-
-networks:
-  postgres:
-    driver: bridge
 
 volumes:
   postgres:

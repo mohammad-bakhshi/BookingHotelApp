@@ -1,6 +1,5 @@
 import { Request, Response } from 'express';
 import { getAllHotels, createHotel, updateHotel, deleteHotel } from './hotel.service';
-import { CreateHotelRequestDto } from './hotel.dto';
 
 
 export const getAllHotelsController = async (req: Request, res: Response) => {
