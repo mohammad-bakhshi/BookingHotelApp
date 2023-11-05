@@ -1,20 +1,9 @@
 version: "3.8"
 services:
-  backend:
-    restart: always
-    build: ./backend
-    volumes:
-      - ./backend:/usr/src/app
-      - /usr/src/app/node_modules
-    depends_on:
-      - postgres
-      - pgadmin
-    ports:
-      - 3000:3000
-
   postgres:
     container_name: postgres_container
     image: postgres
+    hostname: postgres
     restart: unless-stopped
     environment:
       POSTGRES_USER: root
@@ -39,6 +28,19 @@ services:
     depends_on:
       - postgres
 
+  # backend:
+  #   restart: always
+  #   build: ./backend
+  #   stdin_open: true
+  #   volumes:
+  #     - ./backend:/usr/src/app
+  #     - /usr/src/app/node_modules
+  #   depends_on:
+  #     - postgres
+  #     - pgadmin
+  #   ports:
+  #     - 3000:3000
+  #   command: /bin/sh -c "pnpm prisma migrate dev && pnpm prisma generate"
 volumes:
   postgres:
   pgadmin:

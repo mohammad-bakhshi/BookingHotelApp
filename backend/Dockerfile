@@ -15,4 +15,29 @@ EXPOSE 3000
 
 RUN pnpm prisma migrate dev
 
-CMD ["pnpm" ,"prisma","generate", "pnpm", "start" ]
+RUN pnpm prisma generate
+
+CMD ["pnpm", "dev" ]
+
+
+FROM node:alpine
+
+# Set the working directory in the container
+WORKDIR /app
+
+# Copy package.json and package-lock.json
+COPY package*.json ./
+COPY pnpm-lock.yaml /usr/app/pnpm-lock.yaml
+
+# Install application dependencies
+RUN npm install -g pnpm
+RUN pnpm install
+
+# Copy the rest of the application code
+COPY . .
+
+# Expose the port your Express.js app is listening on
+EXPOSE 3000
+
+# Start the application
+CMD ["npm", "dev"]
